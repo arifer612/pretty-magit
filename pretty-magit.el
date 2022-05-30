@@ -160,13 +160,13 @@ e.g.
 '(docs
   :icon ?
   :props (:foreground \"#3F681C\" :height 1.2)
-  :target type)
-"
-  (cond ((unless (car rule)
-           'nil))
-        ((unless (plist-get (cdr rule) :icon)
-           'nil))
+  :target type)"
+  (cond ((not (car rule))
+         'nil)
+        ((not (plist-get (cdr rule) :icon))
+         'nil)
         (t)))
+
 
 (defun pretty-magit--add-rule (rule)
   "Add a single rule for replacing WORD to ICON with PROPS in TYPE."
@@ -212,7 +212,7 @@ e.g. 2 rules
            (pretty-magit--add-rule rule-list)))
         (t
          (--each rule-list
-           (when (pretty-magit--rulep rule)
+           (when (pretty-magit--rulep it)
              (pretty-magit--add-rule it))))))
 
 (defun pretty-magit-reload-rules ()
