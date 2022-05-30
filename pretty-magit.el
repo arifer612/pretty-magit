@@ -98,11 +98,13 @@ Return TARGET if it is a valid header, otherwise return the default 'type."
   "Prepare the final rx sequence list with WORD in TARGET."
   (let* ((target (pretty-magit--ensure-target target))
          (pretty-magit--type-rx (cond ((equal target 'type)
-                                       (pretty-magit--new-type-rx word))
+                                       (pretty-magit--new-type-rx
+                                        (symbol-name word))) 
                                       (t
                                        pretty-magit--type-rx)))
          (pretty-magit--scope-rx (cond ((equal target 'scope)
-                                        (pretty-magit--new-scope-rx word))
+                                        (pretty-magit--new-scope-rx
+                                         (symbol-name word)))
                                        (t
                                         pretty-magit--scope-rx))))
     (append '(bol)
@@ -155,7 +157,7 @@ with keyword-value pairs of the icon, props, and target. Proper rules need to
 have a car and a value for the icon property.
 
 e.g.
-'(\"docs\"
+'(docs
   :icon ?
   :props (:foreground \"#3F681C\" :height 1.2)
   :target type)
@@ -192,17 +194,17 @@ e.g.
   PROPS into TYPE.
 
 e.g. a single rule
-(pretty-magit-add-rule '(\"docs\"
+(pretty-magit-add-rule '(docs
                          :icon ?
                          :props (:foreground \"#3F681C\" :height 1.2)
                          :target type))
 
 e.g. 2 rules
-(pretty-magit-add-rule '((\"docs\"
+(pretty-magit-add-rule '((docs
                           :icon ?
                           :props (:foreground \"#3F681C\" :height 1.2)
                           :target type)
-                         (\"fix\"
+                         (fix
                           :icon ?
                           :props (:foreground \"#FB6542\" :height 1.2)
                           :target type)))"
