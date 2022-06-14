@@ -254,7 +254,9 @@ rules will be deleted."
   "Prettify Git messages on Magit with icons."
   :init-value nil :lighter nil :keymap nil
   (dolist (target '(magit-status magit-refresh-buffer))
-    (advice-add target :after #'pretty-magit-prettify)))
+    (if (bound-and-true-p pretty-magit-mode)
+        (advice-add target :after #'pretty-magit-prettify)
+      (advice-remove target #'pretty-magit-prettify))))
 
 (provide 'pretty-magit)
 ;;; pretty-magit.el ends here
