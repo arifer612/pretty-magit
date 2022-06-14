@@ -42,7 +42,12 @@
 
 (defvar pretty-magit--git-ref-rx
   '((zero-or-more (not (any " "))))
-  "Default rx sequence for the git-ref")
+  "Default rx sequence for the git-ref.")
+
+(defvar pretty-magit--git-log-rx
+  '((optional (zero-or-more (not (any " ")))
+              "* "))
+  "Default rx sequence for markup used when viewing magit log.")
 
 (defvar pretty-magit--git-branch-name-rx
   '((optional (zero-or-more (not (any " ")))
@@ -110,6 +115,7 @@ Return TARGET if it is a valid header, otherwise return the default 'type."
     (append '(bol)
             pretty-magit--git-ref-rx
             '(" ")
+            pretty-magit--git-log-rx
             pretty-magit--git-branch-name-rx
             pretty-magit--type-rx
             pretty-magit--scope-rx
