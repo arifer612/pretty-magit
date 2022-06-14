@@ -135,25 +135,25 @@ Return TARGET if it is a valid header, otherwise return the default 'type."
 (defun pretty-magit--rule-exist-p (rule)
   "Check if RULE exists in pretty-magit-rules.
 
-The WORD and SCOPE of rules are used to check for existence. If the rule exists,
+The WORD and SCOPE of rules are used to check for existence. If RULE exists,
 the ICON and PROPS are compared. If all are equal, return 't, otherwise return
 the index number of the rule in pretty-magit-rules. If the rules does not exist,
 return 'nil."
   (catch 'exist
     (unless pretty-magit-rules
       (throw 'exist 'nil))
-    (-let (((r-word . (&plist :icon r-icon :props r-props :target r-target))
-            rule))
+    (-let* (((r-word . (&plist :icon r-icon :props r-props :target r-target))
+            rule)
+            (r-target (cond (r-target)
+                            (t 'type))))
       (--each pretty-magit-rules
         (-let (((word . (&plist :icon :props :target)) it))
-          (unless (string= word r-word)
-            (throw 'exist 'nil))
-          (unless (equal target r-target)
-            (throw 'exist 'nil))
-          (unless (and (equal icon r-icon)
+          (when (and (string= word r-word)
+                     (equal target r-target))
+            (when (and (equal icon r-icon)
                        (equal props r-props))
-            (throw 'exist it-index))
-          (throw 'exist t))))))
+              (throw 'exist t))
+            (throw 'exist it-index)))))))
 
 (defun pretty-magit--rulep (rule)
   "Return 't if RULE is a proper rule.
