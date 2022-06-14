@@ -227,9 +227,9 @@ e.g. 2 rules
 Useful if it is edited by hand and the regexp string needs to be fixed. Improper
 rules will be deleted."
   (interactive)
-  (let* ((tmp pretty-magit-rules))
+  (let* ((tmp (copy-alist pretty-magit-rules)))
     (setq pretty-magit-rules 'nil)
-    (pretty-magit-add-rules tmp)))
+    (pretty-magit-add-rule tmp)))
 
 ;;;###autoload
 (defun pretty-magit-prettify ()
