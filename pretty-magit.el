@@ -104,7 +104,7 @@ Return TARGET if it is a valid header, otherwise return the default 'type."
   (let* ((target (pretty-magit--ensure-target target))
          (pretty-magit--type-rx (cond ((equal target 'type)
                                        (pretty-magit--new-type-rx
-                                        (symbol-name word))) 
+                                        (symbol-name word)))
                                       (t
                                        pretty-magit--type-rx)))
          (pretty-magit--scope-rx (cond ((equal target 'scope)
@@ -172,7 +172,6 @@ e.g.
         ((not (plist-get (cdr rule) :icon))
          'nil)
         (t)))
-
 
 (defun pretty-magit--add-rule (rule)
   "Add a single rule for replacing WORD to ICON with PROPS in TYPE."
