@@ -1,0 +1,91 @@
+
+[[file:assets/magit-transition.gif]]
+
+This package brings in the functionality to replace important keywords in a
+Git message's header with icons specified by text properties of your choice.
+This package is meant to work in line with the Git message conventions as
+laid out in "Conventional Commits" https://www.conventionalcommits.org/
+
+A typical Git message should be of the form where the text in angled brackets
+are the default names for sections of the Git message:
+#+BEGIN_EXAMPLE
+  <type>(<scope>): <subject>
+  --BLANK LINE--
+  <body>
+  --BLANK LINE--
+  <footer>
+#+END_EXAMPLE
+
+** Installation
+To be able to use this package, fonts with icon support is required. A good,
+free font that covers most icons that you would need is [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]].
+
+On Spacemacs, you can install this by adding the following to
+=dotspacemacs-additional-packages=:
+#+BEGIN_SRC emacs-lisp
+  (setq-default
+   ...
+   dotspacemacs-additional-packages
+   '(...
+     (pretty-magit :location (recipe
+                              :fetcher github
+                              :repo "arifer612/pretty-magit"))
+     ...))
+#+END_SRC
+
+** Example configuration
+The following configuration is an example that I use. It covers most of the
+general header types that are recommended in [[https://www.conventionalcommits.org/][Conventional Commits]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pretty-magit
+    :after magit
+    :hook (magit-mode . pretty-magit-mode)
+    :config
+    (pretty-magit-add-rule
+     '((build
+        :desc "Changes that affect the build system or external dependencies."
+        :icon ?
+        :props (:foreground "#00008B" :height 1.2))
+       (chore
+        :desc "Updating grunt tasks."
+        :icon ?
+        :props (:foreground "#F5F5DC" :height 1.2))
+       (ci
+        :desc "Changes to CI configuration files and scripts."
+        :icon ?
+        :props (:foreground "#008080" :height 1.2))
+       (docs
+        :desc "Documentation only changes."
+        :icon ?
+        :props (:foreground "#A1f757" :height 1.2))
+       (feat
+        :desc "A new feature."
+        :icon ?
+        :props (:foreground "#8D012F" :height 1.2))
+       (fix
+        :desc "A bug fix."
+        :icon ?
+        :props (:foreground "#FB6542" :height 1.2))
+       (perf
+        :desc "A code change that improves performance."
+        :icon ?
+        :props (:foreground "#607D8B" :height 1.2))
+       (refactor
+        :desc "A code changes that neither fixes a bug nor adds a feature."
+        :icon ?פּ
+        :props (:foreground "#F5F5F5" :height 1.2))
+       (revert
+        :desc "For commits that reverts previous commit(s)."
+        :icon ?
+        :props (:foreground "#FDFD96" :height 1.2))
+       (style
+        :desc "Changes that do not affect the meaning of the code."
+        :icon ?
+        :props (:foreground "#FFFF3D" :height 1.2))
+       (test
+        :desc "Adding missing tests or correcting existing tests."
+        :icon ?
+        :props (:foreground "#FAAED2" :height 1.2)))))
+#+END_SRC
+
