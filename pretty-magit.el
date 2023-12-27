@@ -45,46 +45,46 @@
 
 ;; Custom variables
 
-(defcustom pretty-magit-rules '(
-                             (test :icon 63027
-                                   :props (:foreground "#FAAED2" :height 1.2)
-                                   :target type
-                                   :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(test!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (style :icon 63119
-                                    :props (:foreground "#FFFF3D" :height 1.2)
-                                    :target type
-                                    :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(style!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (revert :icon 62830
-                                     :props (:foreground "#FDFD96" :height 1.2)
-                                     :target type
-                                     :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(revert!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (refactor :icon 64324
-                                       :props (:foreground "#F5F5F5" :height 1.2)
-                                       :target type
-                                       :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(refactor!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (perf :icon 61847
-                                   :props (:foreground "#607D8B" :height 1.2)
-                                   :target type
-                                   :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(perf!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (fix :icon 61832
-                                  :props (:foreground "#FB6542" :height 1.2)
-                                  :target type
-                                  :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(fix!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (feat :icon 58014 :props
-                                   (:foreground "#8D012F" :height 1.2)
-                                   :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(feat!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (docs :icon 62072 :props
-                                   (:foreground "#A1f757" :height 1.2)
-                                   :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(docs!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (ci :icon 59239 :props
-                                 (:foreground "#008080" :height 1.2)
-                                 :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(ci!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (chore :icon 62945 :props
-                                    (:foreground "#F5F5DC" :height 1.2)
-                                    :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(chore!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
-                             (build :icon 58022 :props
-                                    (:foreground "#00008B" :height 1.2)
-                                    :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(build!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)"))
+(defcustom pretty-magit-rules
+  '((test :icon 63027
+          :props (:foreground "#FAAED2" :height 1.2)
+          :target type
+          :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(test!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (style :icon 63119
+           :props (:foreground "#FFFF3D" :height 1.2)
+           :target type
+           :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(style!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (revert :icon 62830
+            :props (:foreground "#FDFD96" :height 1.2)
+            :target type
+            :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(revert!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (refactor :icon 64324
+              :props (:foreground "#F5F5F5" :height 1.2)
+              :target type
+              :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(refactor!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (perf :icon 61847
+          :props (:foreground "#607D8B" :height 1.2)
+          :target type
+          :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(perf!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (fix :icon 61832
+         :props (:foreground "#FB6542" :height 1.2)
+         :target type
+         :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(fix!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (feat :icon 58014 :props
+          (:foreground "#8D012F" :height 1.2)
+          :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(feat!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (docs :icon 62072 :props
+          (:foreground "#A1f757" :height 1.2)
+          :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(docs!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (ci :icon 59239 :props
+        (:foreground "#008080" :height 1.2)
+        :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(ci!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (chore :icon 62945 :props
+           (:foreground "#F5F5DC" :height 1.2)
+           :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(chore!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+    (build :icon 58022 :props
+           (:foreground "#00008B" :height 1.2)
+           :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(build!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)"))
   "List containing magit replacing rules.")
 
 (defcustom pretty-magit-text-prop '()
