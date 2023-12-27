@@ -43,14 +43,54 @@
 
 (require 'dash)
 
+;; Custom variables
+
+(defcustom pretty-magit-rules '(
+                             (test :icon 63027
+                                   :props (:foreground "#FAAED2" :height 1.2)
+                                   :target type
+                                   :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(test!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (style :icon 63119
+                                    :props (:foreground "#FFFF3D" :height 1.2)
+                                    :target type
+                                    :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(style!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (revert :icon 62830
+                                     :props (:foreground "#FDFD96" :height 1.2)
+                                     :target type
+                                     :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(revert!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (refactor :icon 64324
+                                       :props (:foreground "#F5F5F5" :height 1.2)
+                                       :target type
+                                       :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(refactor!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (perf :icon 61847
+                                   :props (:foreground "#607D8B" :height 1.2)
+                                   :target type
+                                   :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(perf!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (fix :icon 61832
+                                  :props (:foreground "#FB6542" :height 1.2)
+                                  :target type
+                                  :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(fix!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (feat :icon 58014 :props
+                                   (:foreground "#8D012F" :height 1.2)
+                                   :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(feat!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (docs :icon 62072 :props
+                                   (:foreground "#A1f757" :height 1.2)
+                                   :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(docs!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (ci :icon 59239 :props
+                                 (:foreground "#008080" :height 1.2)
+                                 :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(ci!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (chore :icon 62945 :props
+                                    (:foreground "#F5F5DC" :height 1.2)
+                                    :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(chore!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)")
+                             (build :icon 58022 :props
+                                    (:foreground "#00008B" :height 1.2)
+                                    :target type :rgx "\\(?:^[^ ]* \\(?:[^ ]*\\* \\)?\\(?:[^ ]* \\)?\\(build!?\\)\\(\\(?:([^ ):]*)\\)?\\): \\(.*\\)$\\)"))
+  "List containing magit replacing rules.")
+
+(defcustom pretty-magit-text-prop '()
+  "Default text properties for pretty-magit.")
 
 ;; Variables:
-
-(defvar pretty-magit-rules '()
-  "List containing of magit replacing rules.")
-
-(defvar pretty-magit-text-prop '()
-  "Default text properties for pretty-magit.")
 
 (defvar pretty-magit--headers '((type . 1) (scope . 2) (subject . 3))
   "Alist of symbols and their group position in a Git message header.")
@@ -104,9 +144,15 @@ Return TARGET if it is a valid header, otherwise return the default 'type."
                             " is not a valid header. Defaulting to 'type."))
            'type))))
 
-(defun pretty-magit--new-type-rx (word)
+(defun pretty-magit--new-breaking-type-rx (word)
   "Prepare an rx sequence with a single WORD in the 'type component."
-  `((group , word)))
+  `((group ,word)))
+
+(defun pretty-magit--new-type-rx (word)
+  "Prepare an rx sequence with a single WORD in the 'type component for breaking
+changes identified by a '!' at the end."
+  `((group ,word
+           (optional "!"))))
 
 (defun pretty-magit--new-scope-rx (word)
   "Prepare an rx sequence with a single WORD in the 'scope component."
@@ -158,7 +204,7 @@ return 'nil."
     (unless pretty-magit-rules
       (throw 'exist 'nil))
     (-let* (((r-word . (&plist :icon r-icon :props r-props :target r-target))
-            rule)
+             rule)
             (r-target (cond (r-target)
                             (t 'type))))
       (--each pretty-magit-rules
@@ -259,17 +305,26 @@ rules will be deleted."
             (while (search-forward-regexp rgx nil t)
               (let* ((scope (> (match-end scope-index)
                                (match-beginning scope-index)))
+                     (match (match-string match-index))
                      (beg (match-beginning match-index))
                      (end (if (and (equal target 'type)
                                    scope)
                               (match-end match-index)
                             (+ 1 (match-end match-index))))
+                     (icon-length (length (string icon)))
                      (icon (if (and (equal target 'type)
                                     scope)
                                (concat (string icon) " ")
-                             (string icon))))
+                             (string icon)))
+                     (breaking (and (equal target 'type)
+                                    (string=
+                                     (substring match -1)
+                                     "!"))))
                 (replace-region-contents beg end (lambda () icon))
-                (add-face-text-property beg (+ beg (length icon)) props)))))))))
+                (add-face-text-property beg (+ beg icon-length) props)
+                (when breaking
+                  (add-face-text-property beg (+ beg icon-length)
+                                          '(:underline "#FF0000") t))))))))))
 
 ;; Minor mode:
 
